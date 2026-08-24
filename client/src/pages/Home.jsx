@@ -3,7 +3,7 @@ import { Header, Match, Commentary } from "../components";
 export default function Home() {
   const api = 7;
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden ">
       
       <div className="px-6! pb-0!">
         <Header />

@@ -37,9 +37,17 @@ export const commentary = pgTable("commentary", {
   period: text("period"),
   eventType: text("event_type"),
   actor: text("actor"),
-  team: text("team "),
+  team: text("team"),
   message: text("message").notNull(),
   metadata: jsonb("metadata"),
   tags: text("tags").array(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const admin = pgTable("admin", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  passwordHash: text("password_hash").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

@@ -5,6 +5,7 @@ import express from "express";
 import http from "http";
 import { matchRouter } from "./routes/matches.route.js";
 import { commentaryRouter } from "./routes/commentary.route.js";
+import { adminRouter } from "./routes/admin.route.js";
 import { attachWebSocketServer } from "./ws/server.js";
 import { securityMiddleware } from "./arcjet.js";
 
@@ -30,6 +31,7 @@ app.use(securityMiddleware());
  
 app.use("/matches", matchRouter);
 app.use("/matches/:id/commentary", commentaryRouter);
+app.use("/admin",adminRouter)
 
 const { broadcastMatchCreated ,broadcastCommentary } = attachWebSocketServer(server);
 app.locals.broadcastMatchCreated = broadcastMatchCreated;
