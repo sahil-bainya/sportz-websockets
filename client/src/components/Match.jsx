@@ -1,19 +1,24 @@
-export default function Match() {
-  const sportName = "Cricket";
-  const status = "finished";
-  const homeTeam = "India";
-  const awayTeam = "England";
-  const homeScore = 200;
-  const awayScore = 250;
-  const time = "13:53";
-  const viewing = false;
+import { formatTime } from "../utils/formatTime.js";
+export default function Match({
+  sportName,
+  status,
+  homeTeam,
+  awayTeam,
+  homeScore = 0,
+  awayScore = 0,
+  time,
+  viewing = false,
+}) {
   return (
     <div className="w-full max-w-sm border-2 rounded-2xl p-3! shadow-sm ">
       <div className="flex items-center justify-between mb-4!">
         <div className="badge badge-outline border-2 border-gray-400 text-gray-600 font-bold px-3!  rounded-2xl">
           {sportName}
         </div>
-        <span className="text-xs font-bold text-gray-500">{status}</span>
+        {status==="live" && <span className="text-xs font-bold text-green-600"><span className="inline-block w-2 h-2 rounded-full bg-green-600 "/> {status}</span>}
+        {status==="scheduled" && <span className="text-xs font-bold text-blue-500">{status}</span>}
+        {status==="finished" && <span className="text-xs font-bold text-gray-500">{status}</span>}
+
       </div>
 
       <div className="flex items-center justify-between mb-3!">
@@ -30,7 +35,7 @@ export default function Match() {
       </div>
       <hr className="text-gray-200 mb-3!" />
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-500 font-bold">{time}</span>
+        <span className="text-xs text-gray-500 font-bold">{formatTime(time)}</span>
 
         <div className="flex items-center gap-2">
           <button

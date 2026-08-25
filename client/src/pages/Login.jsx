@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   Lock,
   Mail,
@@ -12,18 +13,27 @@ import {
   Users,
 } from "lucide-react";
 
+import { useLoginMutation } from "../store/adminApi.js";
+import { setCredentials } from "../store/authSlice.js";
+
 export default function Login() {
   const { handleSubmit, register } = useForm();
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const login = async (data) => {
-    setError("");
+  const [login, { isLoading, error }] = useLoginMutation();
+
+  const onSubmitHandler = async (formData) => {
     try {
-      navigate("/admin")
-    } catch (error) {
-      setError(error.message);
+      const result = await login({
+        email: formData.email,
+        password: formData.password,
+      }).unwrap(); // .unwrap() se success/failure normal try-catch se pakad sakte ho
+      dispatch(setCredentials(result.data));
+      navigate("/admin");
+    } catch (err) {
+      console.error("Login failed:", err);
     }
   };
 
@@ -35,10 +45,12 @@ export default function Login() {
             <h1 className="text-2xl font-extrabold text-black">Sportz</h1>
             <p className="text-sm text-black/70">Admin Panel</p>
           </div>
-          <div className="flex items-center gap-2 bg-white border-2 border-black rounded-lg px-4! py-2! text-sm font-bold">
-            <span className="w-2 h-2 rounded-full bg-green-500"></span>
-            ONLINE
-          </div>
+          <button onClick={() => navigate("/")}>
+            <div className="flex items-center gap-2 bg-white border-2 border-black rounded-lg px-4! py-2! text-sm font-bold">
+              <span className="w-2 h-2 rounded-full bg-green-500"></span>
+              Live Matches
+            </div>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -105,16 +117,17 @@ export default function Login() {
                 <Lock size={24} className="text-black" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-black">
-                  Admin Login
-                </h2>
+                <h2 className="text-2xl font-bold text-black">Admin Login</h2>
                 <p className="text-sm text-gray-500">
                   Enter your credentials to continue
                 </p>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit(login)} className="space-y-3">
+            <form
+              onSubmit={handleSubmit(onSubmitHandler)}
+              className="space-y-3"
+            >
               <div className="mb-3!">
                 <label className="block text-sm font-semibold text-black mb-2!">
                   Email
@@ -140,7 +153,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <div>
+              <div className="mb-5!">
                 <label className="block text-sm font-semibold text-black mb-2!">
                   Password
                 </label>
@@ -166,16 +179,19 @@ export default function Login() {
               </div>
 
               {error && (
-                <div className="px-4 py-3 bg-red-50 border border-red-300 rounded-lg">
-                  <p className="text-red-600 text-sm text-center">{error}</p>
+                <div className="px-4! py-3! bg-red-50 border border-red-300 rounded-lg">
+                  <p className="text-red-600 text-md text-center">
+                    {error?.data?.error || "Login failed"}
+                  </p>
                 </div>
               )}
 
               <button
                 type="submit"
+                disabled={isLoading}
                 className="my-4! w-full py-2.5! bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-sm rounded-lg border-2 border-black transition-colors duration-200"
               >
-                Login
+                {isLoading ? "Logging in..." : "Login"}
               </button>
 
               <div className="flex items-center gap-3 py-1!">

@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { ArrowLeft, Calendar } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 export default function CreateMatch({ onBack }) {
+  const navigate = useNavigate()
   const { handleSubmit, register } = useForm();
 
   const onSubmit = (data) => {
@@ -26,13 +27,11 @@ export default function CreateMatch({ onBack }) {
             </p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onBack}
-          className="bg-white border-2 border-black rounded-lg px-4! py-2! text-sm font-bold hover:bg-gray-50"
-        >
-          Cancel
-        </button>
+        <button onClick={()=>navigate("/")}>
+        <div className="flex items-center gap-2 bg-white border-2 border-black rounded-lg px-4! py-2! text-sm font-bold">
+          <span className="w-2 h-2 rounded-full bg-green-500"></span>
+          Live Matches
+        </div></button>
       </div>
 
       {/* Form */}

@@ -7,6 +7,7 @@ import AddCommentary from "./AdminPanel/AddCommentary.jsx";
 import Dashboard from "./AdminPanel/Dashboard.jsx";
 import Sidebar from "./AdminPanel/SideBar.jsx";
 import Layout from "./AdminPanel/Layout.jsx";
+import ProtectedRoute from "./ProtectedRouter.jsx";
 
 export {
   Layout,
@@ -18,4 +19,5 @@ export {
   CreateMatch,
   AddCommentary,
   Dashboard,
+  ProtectedRoute
 };

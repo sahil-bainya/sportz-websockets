@@ -7,6 +7,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+ 
     const navigate = useNavigate()
   
     const stats = [
@@ -83,10 +84,11 @@ export default function Dashboard() {
             Here's what's happening with your matches today.
           </p>
         </div>
+        <button onClick={()=>navigate("/")}>
         <div className="flex items-center gap-2 bg-white border-2 border-black rounded-lg px-4! py-2! text-sm font-bold">
           <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          ONLINE
-        </div>
+          Live Matches
+        </div></button>
       </div>
 
       <div className="p-6! space-y-6!">
