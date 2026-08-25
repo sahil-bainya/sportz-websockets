@@ -7,6 +7,7 @@ import {
 import { db } from "../db/db.js";
 import { commentary } from "../db/schema.js";
 import { eq, desc } from "drizzle-orm";
+import { verifyAdmin } from "../middlewares/verify-admin.js";
 
 const MAX_LIMIT = 100;
 export const commentaryRouter = Router({ mergeParams: true });
@@ -44,7 +45,7 @@ commentaryRouter.get("/", async (req, res) => {
   }
 });
 
-commentaryRouter.post("/", async (req, res) => {
+commentaryRouter.post("/", verifyAdmin ,async (req, res) => {
   const paramsResult = matchIdParamSchema.safeParse(req.params);
   if (!paramsResult.success) {
     return res

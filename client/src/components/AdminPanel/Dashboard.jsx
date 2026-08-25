@@ -4,9 +4,12 @@ import {
   Flag,
   MessageSquare,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const stats = [
+    const navigate = useNavigate()
+  
+    const stats = [
     { label: "Live Matches", value: 3, icon: Radio, color: "text-blue-500", bg: "bg-blue-50" },
     { label: "Upcoming Matches", value: 5, icon: Calendar, color: "text-green-500", bg: "bg-green-50" },
     { label: "Completed Matches", value: 12, icon: Flag, color: "text-amber-500", bg: "bg-amber-50" },

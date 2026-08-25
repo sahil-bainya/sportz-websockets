@@ -64,7 +64,7 @@ function handleMessage(socket, data) {
   if (message?.type === "subscribe" && Number.isInteger(message.matchId)) {
     subscribe(message.matchId, socket);
     socket.subscriptions.add(message.matchId);
-    sendJson(socket, { type: "subcribed", matchId: message.matchId });
+    sendJson(socket, { type: "subscribed", matchId: message.matchId });
     return;
   }
 

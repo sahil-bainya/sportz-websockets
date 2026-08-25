@@ -1,5 +1,5 @@
 import AgentAPI from "apminsight";
-AgentAPI.config()
+AgentAPI.config();
 
 import express from "express";
 import http from "http";
@@ -8,6 +8,8 @@ import { commentaryRouter } from "./routes/commentary.route.js";
 import { adminRouter } from "./routes/admin.route.js";
 import { attachWebSocketServer } from "./ws/server.js";
 import { securityMiddleware } from "./arcjet.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const PORT = Number(process.env.PORT || 8000);
 const HOST = process.env.HOST || "0.0.0.0";
@@ -21,6 +23,14 @@ const server = http.createServer(app);
 // attachWebSocketServer(server) → attaches the WebSocket server to the same HTTP server.
 // This allows HTTP and WebSocket to use the same port.
 
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true, // cookies allow karne ke liye zaroori
+  }),
+);
+
+app.use(cookieParser());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -28,12 +38,13 @@ app.get("/", (req, res) => {
 });
 
 app.use(securityMiddleware());
- 
+
 app.use("/matches", matchRouter);
 app.use("/matches/:id/commentary", commentaryRouter);
-app.use("/admin",adminRouter)
+app.use("/admin", adminRouter);
 
-const { broadcastMatchCreated ,broadcastCommentary } = attachWebSocketServer(server);
+const { broadcastMatchCreated, broadcastCommentary } =
+  attachWebSocketServer(server);
 app.locals.broadcastMatchCreated = broadcastMatchCreated;
 app.locals.broadcastCommentary = broadcastCommentary;
 // app.locals stores application-level data/functions.

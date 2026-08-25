@@ -9,7 +9,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "demo": "node src/crud-demo.js"
+    "demo": "node src/crud-demo.js",
+    "create-admin": "node scripts/create-admin.js" 
+    
   },
   "keywords": [],
   "author": "",
@@ -20,9 +22,13 @@
     "@arcjet/node": "^1.10.0",
     "@neondatabase/serverless": "^1.1.0",
     "apminsight": "^5.5.1",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.0",
     "rate-limiter-flexible": "^11.2.0",
     "ws": "^8.21.3",

@@ -15,6 +15,13 @@
       "when": 1787504292625,
       "tag": "0001_gray_norrin_radd",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1787645354464,
+      "tag": "0002_famous_madelyne_pryor",
+      "breakpoints": true
     }
   ]
 }

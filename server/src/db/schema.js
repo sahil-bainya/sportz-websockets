@@ -14,6 +14,15 @@ export const matchStatusEnum = pgEnum("match_status", [
   "finished",
 ]);
 
+export const admin = pgTable("admin", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  refreshToken: text("refresh_token"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const matches = pgTable("matches", {
   id: serial("id").primaryKey(),
   sport: text("sport").notNull(),
@@ -24,6 +33,9 @@ export const matches = pgTable("matches", {
   endTime: timestamp("end_time"),
   homeScore: integer("home_score").notNull().default(0),
   awayScore: integer("away_score").notNull().default(0),
+  createdBy: integer("created_by").references(() => admin.id, {
+    onDelete: "set null",
+  }),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -41,13 +53,5 @@ export const commentary = pgTable("commentary", {
   message: text("message").notNull(),
   metadata: jsonb("metadata"),
   tags: text("tags").array(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
-
-export const admin = pgTable("admin", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull(),
-  passwordHash: text("password_hash").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
