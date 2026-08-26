@@ -1,21 +1,52 @@
 import { useForm } from "react-hook-form";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useCreateMatchMutation } from "../../store/matchesApi.js";
 export default function CreateMatch({ onBack }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { handleSubmit, register } = useForm();
+  const [isCricket, setisCricket] = useState(false);
+  const [createMatch, { isLoading, error }] = useCreateMatchMutation();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // create match logic
+  const onSubmit = async (formData) => {
+    try {
+      const payload = {
+        sport: formData.sport,
+        homeTeam: formData.homeTeam,
+        awayTeam: formData.awayTeam,
+
+        startTime: new Date(formData.startTime).toISOString(),
+        endTime: formData.endTime
+          ? new Date(formData.endTime).toISOString()
+          : undefined,
+        homeScore: Number(formData.initialHomeScore) || 0,
+        awayScore: Number(formData.initialAwayScore) || 0,
+      };
+      if (isCricket) {
+        payload.homeTeamWickets = formData.initialHomeWickets
+          ? Number(formData.initialHomeWickets)
+          : 0;
+        payload.awayTeamWickets = formData.initialAwayWickets
+          ? Number(formData.initialAwayWickets)
+          : 0;
+      }
+      await createMatch(payload).unwrap();
+      navigate("/admin");
+    } catch (err) {
+      console.error("Failed to create match:", err);
+    }
   };
 
   return (
     <div className="h-full">
-      {/* Header */}
       <div className="bg-amber-300 flex items-center justify-between px-8! py-5! border-b-2 border-black">
         <div className="flex items-center gap-3">
-          <button type="button" onClick={onBack} className="text-black hover:opacity-70">
+          <button
+            type="button"
+            onClick={onBack}
+            className="text-black hover:opacity-70"
+          >
             <ArrowLeft size={20} />
           </button>
           <div>
@@ -27,18 +58,17 @@ export default function CreateMatch({ onBack }) {
             </p>
           </div>
         </div>
-        <button onClick={()=>navigate("/")}>
-        <div className="flex items-center gap-2 bg-white border-2 border-black rounded-lg px-4! py-2! text-sm font-bold">
-          <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          Live Matches
-        </div></button>
+        <button onClick={() => navigate("/")}>
+          <div className="flex items-center gap-2 bg-white border-2 border-black rounded-lg px-4! py-2! text-sm font-bold">
+            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            Live Matches
+          </div>
+        </button>
       </div>
 
-      {/* Form */}
       <div className="p-10!">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-7!">
-            {/* Sport */}
             <div>
               <label className="block text-sm font-semibold text-black mb-2!">
                 Sport
@@ -46,30 +76,20 @@ export default function CreateMatch({ onBack }) {
               <select
                 className="w-full bg-white text-gray-700 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
                 {...register("sport")}
+                defaultValue=""
+                onChange={(e) => setisCricket(e.target.value === "cricket")}
               >
-                <option value="">Select Sport</option>
+                <option value="" disabled>
+                  Select Sport
+                </option>
                 <option value="cricket">Cricket</option>
                 <option value="football">Football</option>
                 <option value="basketball">Basketball</option>
               </select>
             </div>
 
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-semibold text-black mb-2!">
-                Status
-              </label>
-              <select
-                className="w-full bg-white text-gray-700 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
-                {...register("status")}
-              >
-                <option value="scheduled">Scheduled</option>
-                <option value="live">Live</option>
-                <option value="finished">Finished</option>
-              </select>
-            </div>
+            <br />
 
-            {/* Home Team */}
             <div>
               <label className="block text-sm font-semibold text-black mb-2!">
                 Home Team
@@ -82,7 +102,6 @@ export default function CreateMatch({ onBack }) {
               />
             </div>
 
-            {/* Away Team */}
             <div>
               <label className="block text-sm font-semibold text-black mb-2!">
                 Away Team
@@ -95,7 +114,6 @@ export default function CreateMatch({ onBack }) {
               />
             </div>
 
-            {/* Start Time */}
             <div>
               <label className="block text-sm font-semibold text-black mb-2!">
                 Start Time
@@ -103,67 +121,104 @@ export default function CreateMatch({ onBack }) {
               <div className="relative">
                 <input
                   type="datetime-local"
-                  className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! pr-10! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                  className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! pr-3! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
                   {...register("startTime", { required: true })}
                 />
-                <Calendar
-                  size={16}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                />
+              
               </div>
             </div>
 
-            {/* End Time */}
             <div>
               <label className="block text-sm font-semibold text-black mb-2!">
-                End Time <span className="text-gray-400 font-normal">(Optional)</span>
+                End Time{" "}
+                <span className="text-gray-400 font-normal">(Optional)</span>
               </label>
               <div className="relative">
                 <input
                   type="datetime-local"
-                  className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! pr-10! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                  className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! pr-3! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
                   {...register("endTime")}
                 />
-                <Calendar
-                  size={16}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                />
+                
               </div>
             </div>
 
-            
-
-            {/* Initial Home Score */}
             <div>
               <label className="block text-sm font-semibold text-black mb-2!">
                 Initial Home Score
               </label>
-              <input
-                type="number"
-                defaultValue={0}
-                className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
-                {...register("initialHomeScore")}
-              />
+              <div className={isCricket ? "flex gap-3!" : ""}>
+                <input
+                  type="number"
+                  defaultValue={0}
+                  className={`bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 ${
+                    isCricket ? "w-1/2" : "w-full"
+                  }`}
+                  {...register("initialHomeScore")}
+                />
+
+                {isCricket && (
+                  <input
+                    type="number"
+                    defaultValue={0}
+                    placeholder="Wickets"
+                    className="w-1/2 bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                    {...register("initialHomeWickets")}
+                  />
+                )}
+              </div>
+              {isCricket && (
+                <div className="flex justify-between px-2!">
+                  <p className="text-xs text-gray-400 mt-1!">Score</p>
+                  <p className="text-xs text-gray-400 mt-1!">Wickets</p>
+                </div>
+              )}
             </div>
 
-            {/* Initial Away Score */}
             <div>
               <label className="block text-sm font-semibold text-black mb-2!">
                 Initial Away Score
               </label>
-              <input
-                type="number"
-                defaultValue={0}
-                className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
-                {...register("initialAwayScore")}
-              />
+              <div className={isCricket ? "flex gap-3!" : ""}>
+                <input
+                  type="number"
+                  defaultValue={0}
+                  className={`bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 ${
+                    isCricket ? "w-1/2" : "w-full"
+                  }`}
+                  {...register("initialAwayScore")}
+                />
+
+                {isCricket && (
+                  <input
+                    type="number"
+                    defaultValue={0}
+                    placeholder="Wickets"
+                    className="w-1/2 bg-white text-gray-900 border border-gray-300 rounded-lg px-4! py-2.5! text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                    {...register("initialAwayWickets")}
+                  />
+                )}
+              </div>
+
+              {isCricket && (
+                <div className="flex justify-between px-2!">
+                  <p className="text-xs text-gray-400 mt-1!">Score</p>
+                  <p className="text-xs text-gray-400 mt-1!">Wickets</p>
+                </div>
+              )}
             </div>
           </div>
-
-          {/* Submit */}
-          <div className="flex justify-end mt-7!">
+          {error && (
+            <div className="px-4! py-3! bg-red-50 border border-red-300 rounded-lg">
+              <p className="text-red-600 text-md text-center">
+                {error?.data?.error || "Failed to create match"}
+              </p>
+            </div>
+          )}
+          <div className={`flex justify-end ${isCricket ? "mt-3!" : "mt-8!"}`}>
             <button
               type="submit"
+              disabled={isLoading}
               className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-sm rounded-lg border-2 border-black px-6! py-2.5! transition-colors duration-200"
             >
               Create Match

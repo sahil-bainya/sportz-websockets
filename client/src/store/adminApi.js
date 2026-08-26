@@ -19,6 +19,9 @@ export const adminApi = createApi({
         method: "POST",
       }),
     }),
+    getMe: builder.query({
+      query: () => ({ url: "/admin/me", method: "GET" }),
+    }),
     getDashboard: builder.query({
       query: () => ({
         url: "/admin/dashboard",
@@ -40,4 +43,5 @@ export const {
   useLogoutMutation,
   useGetDashboardQuery,
   useRefreshTokenMutation,
+  useGetMeQuery 
 } = adminApi;

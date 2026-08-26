@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { eq } from "drizzle-orm";
+import { eq ,desc} from "drizzle-orm";
 import { db } from "../db/db.js";
 import { admin, matches } from "../db/schema.js";
 import { loginSchema } from "../validation/admin.js";
@@ -12,6 +12,11 @@ import { cookieOptions } from "../utils/cookie-options.js";
 import { verifyAdmin } from "../middlewares/verify-admin.js";
 
 export const adminRouter = Router();
+
+adminRouter.get("/me", verifyAdmin, async (req, res) => {
+  res.set("Cache-Control", "no-store"); //Ye ensure karega ki browser is response ko kabhi cache hi na kare, isliye 304 kabhi aayega hi nahi — hamesha fresh 200 milega.
+  res.status(200).json({ data: req.admin });
+});
 
 adminRouter.post("/login", async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
@@ -88,9 +93,14 @@ adminRouter.post("/refresh-token", async (req, res) => {
 
     let decoded;
     try {
-      decoded = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+      decoded = jwt.verify(
+        incomingRefreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+      );
     } catch (error) {
-      return res.status(401).json({ error: "Invalid or expired refresh token" });
+      return res
+        .status(401)
+        .json({ error: "Invalid or expired refresh token" });
     }
 
     const [foundAdmin] = await db
@@ -102,9 +112,10 @@ adminRouter.post("/refresh-token", async (req, res) => {
       return res.status(401).json({ error: "Invalid refresh token" });
     }
 
-    
     if (foundAdmin.refreshToken !== incomingRefreshToken) {
-      return res.status(401).json({ error: "Refresh token expired or already used" });
+      return res
+        .status(401)
+        .json({ error: "Refresh token expired or already used" });
     }
 
     const newAccessToken = generateAccessToken(foundAdmin);
@@ -129,12 +140,38 @@ adminRouter.post("/refresh-token", async (req, res) => {
 adminRouter.get("/dashboard", verifyAdmin, async (req, res) => {
   try {
     const myMatches = await db
-      .select()
+      .select() 
       .from(matches)
       .where(eq(matches.createdBy, req.admin.id))
       .orderBy(desc(matches.createdAt));
-    res.status(200).json({ data: myMatches });
-  } catch (error) {
+    const liveMatches = myMatches.filter(
+    (match) => match.status === "live"
+  );
+
+  const liveCount = myMatches.filter(
+    (match) => match.status === "live"
+  ).length;
+
+  const scheduledCount = myMatches.filter(
+    (match) => match.status === "scheduled"
+  ).length;
+
+  const finishedCount = myMatches.filter(
+    (match) => match.status === "finished"
+  ).length;
+
+  res.status(200).json({
+    data: {
+      matches: myMatches,
+      liveMatches,
+      counts: {
+        live: liveCount,
+        scheduled: scheduledCount,
+        finished: finishedCount,
+      },
+    },
+  });
+  } catch (error) { 
     console.error("Failed to fetch dashboard matches:", error);
     res.status(500).json({ error: "Failed to fetch dashboard matches" });
   }

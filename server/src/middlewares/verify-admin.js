@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../db/db.js";
 import { admin } from "../db/schema.js";
 
-export async function verifyAdmin(req, _ , next) {
+export async function verifyAdmin(req, res , next) {
   try {
     const token =
       req.cookies?.accessToken ||

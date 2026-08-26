@@ -33,6 +33,8 @@ export const matches = pgTable("matches", {
   endTime: timestamp("end_time"),
   homeScore: integer("home_score").notNull().default(0),
   awayScore: integer("away_score").notNull().default(0),
+  homeTeamWickets:integer("home_team_wickets"),
+  awayTeamWickets:integer("away_team_wickets"),
   createdBy: integer("created_by").references(() => admin.id, {
     onDelete: "set null",
   }),

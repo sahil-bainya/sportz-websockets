@@ -22,6 +22,20 @@
       "when": 1787645354464,
       "tag": "0002_famous_madelyne_pryor",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1787733064443,
+      "tag": "0003_wide_franklin_richards",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1787743545508,
+      "tag": "0004_foamy_wallow",
+      "breakpoints": true
     }
   ]
 }

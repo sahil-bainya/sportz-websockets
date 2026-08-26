@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Header, Match, Commentary } from "../components";
 import { useGetMatchesQuery } from "../store/matchesApi";
 
 export default function Home() {
   const { data, isLoading, error } = useGetMatchesQuery();
+  const [filter, setFilter] = useState(null);
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Something went wrong</p>;
   return (
@@ -18,6 +20,24 @@ export default function Home() {
               <span className="w-1 h-6 bg-blue-200 rounded-full"></span>
               <h2 className="text-xl font-bold text-black">Current Matches</h2>
             </div>
+            <div className="flex gap-2">
+              
+              <div className="flex gap-2">
+                <select
+                  className="w-full bg-gray-100 text-gray-700 border-2 border-gray-300 rounded-lg px-2! py-1! text-sm focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100"
+                  defaultValue={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <option value="" defaultChecked>All</option>
+                  <option value="cricket">Cricket</option>
+                  <option value="football">Football</option>
+                  <option value="basketball">Basketball</option>
+                </select>
+              </div>
+              <div className="bg-gray-300 border-2 border-gray-500 rounded-lg px-2! pb-1! font-bold">
+                Total Matches : {data.length}
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 ">
@@ -30,7 +50,10 @@ export default function Home() {
                   awayTeam={match.awayTeam}
                   homeScore={match.homeScore}
                   awayScore={match.awayScore}
-                  time={match.startTime}
+                  startTime={match.startTime}
+                  endTime={match.endTime}
+                  homeTeamWickets={match.homeTeamWickets}
+                  awayTeamWickets={match.awayTeamWickets}
                 />
               </div>
             ))}
