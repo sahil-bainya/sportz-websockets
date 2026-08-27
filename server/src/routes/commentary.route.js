@@ -45,7 +45,7 @@ commentaryRouter.get("/", async (req, res) => {
   }
 });
 
-commentaryRouter.post("/", verifyAdmin ,async (req, res) => {
+commentaryRouter.post("/", verifyAdmin, async (req, res) => {
   const paramsResult = matchIdParamSchema.safeParse(req.params);
   if (!paramsResult.success) {
     return res

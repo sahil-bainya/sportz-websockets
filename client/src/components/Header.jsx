@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { UserShield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-export default function Header() {
-  const [isOnline, setIsOnline] = useState(false);
-
+export default function Header({status}) {
+  
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -17,9 +15,9 @@ export default function Header() {
       <div className="flex gap-5">
         <div className="badge badge-outline border-2 border-black text-black gap-2 px-3! py-3! bg-amber-50 font-bold">
           <span
-            className={`w-3 h-3 rounded-full ${isOnline ? "bg-green-400" : "bg-gray-400"}`}
+            className={`w-3 h-3 rounded-full ${status ? "bg-green-400" : "bg-gray-400"}`}
           ></span>
-          {isOnline ? "ONLINE" : "OFFLINE"}
+          {status ? "ONLINE" : "OFFLINE"}
         </div>
         {isAuthenticated ? (
           <button onClick={() => navigate("/admin")}>

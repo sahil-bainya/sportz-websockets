@@ -1,21 +1,21 @@
 import { Radio, Calendar, MessageSquare } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useGetDashboardQuery } from "../../store/adminApi.js";
 import { formatTime } from "../../utils/formatTime.js";
+
 export default function Dashboard() {
   const { data, isLoading, error } = useGetDashboardQuery();
-  console.log(data?.data);
 
   const navigate = useNavigate();
 
   const statusStyle = {
-    Finished: "bg-gray-100 text-gray-600 border-gray-300",
-    Live: "bg-green-50 text-green-600 border-green-300",
-    Scheduled: "bg-blue-50 text-blue-600 border-blue-300",
+    finished: "bg-gray-100 text-gray-600 border-gray-300",
+    live: "bg-green-50 text-green-600 border-green-300",
+    scheduled: "bg-blue-50 text-blue-600 border-blue-300",
   };
 
   return (
-    <div className="    ">
+    <div>
       {/* Header */}
       <div className="bg-amber-300 flex items-center justify-between px-8! py-5! border-b-2 border-black">
         <div>
@@ -76,8 +76,8 @@ export default function Dashboard() {
           </div>
 
           {/* Recent matches + Live Matches */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-2!">
-            <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl py-4! px-3!">
+          <div className="grid grid-cols-[3fr_2fr] gap-3! min-h-full w-full">
+            <div className="bg-white border border-gray-200 rounded-2xl py-4! px-3! min-w-0">
               <div className="mb-4!">
                 <h2 className="font-bold text-black">Recent Matches</h2>
               </div>
@@ -91,7 +91,6 @@ export default function Dashboard() {
                       <th className="pb-2! font-medium">Status</th>
                       <th className="pb-2! font-medium">Start Time</th>
                       <th className="pb-2! font-medium">Score</th>
-                      <th className="pb-2! font-medium text-right">Action</th>
                     </tr>
                   </thead>
 
@@ -125,11 +124,6 @@ export default function Dashboard() {
                           {match.sport === "cricket" &&
                             "/" + match.awayTeamWickets}
                         </td>
-                        <td className="py-3! text-right">
-                          <button className="text-xs font-bold border-2 border-black rounded-lg px-3! py-1.5! hover:bg-yellow-100">
-                            View
-                          </button>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -137,13 +131,13 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-2xl p-5!">
-              <h2 className="font-bold text-black mb-4! flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500"></span>
+            <div className="bg-white border border-gray-200 rounded-2xl p-2! min-w-0">
+              <h2 className="font-bold text-black mb-3! flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-500"></span>
                 Live Matches
               </h2>
 
-              <div className="space-y-3!">
+              <div className="space-y-3! ">
                 {data.data.liveMatches.map((match) => (
                   <div
                     key={match.id}
@@ -155,10 +149,40 @@ export default function Dashboard() {
                       </p>
                       <p className="text-xs text-gray-400">{match.sport}</p>
                     </div>
-                    <button className="flex items-center gap-1.5 bg-yellow-200 hover:bg-yellow-300 text-black font-bold text-xs rounded-lg border-2 border-black p-2! transition-colors duration-200">
+
+                    <div className="flex items-center gap-3">
+                      <div className="text-center">
+                        <p className="font-extrabold text-black text-lg leading-none">
+                          {match.homeScore}
+                          {match.sport === "cricket" &&
+                            `-${match.homeTeamWickets}`}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1!">
+                          {match.homeTeam}
+                        </p>
+                      </div>
+
+                      <span className="font-bold text-gray-300">-</span>
+
+                      <div className="text-center">
+                        <p className="font-extrabold text-black text-lg leading-none">
+                          {match.awayScore}
+                          {match.sport === "cricket" &&
+                            `-${match.awayTeamWickets}`}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1!">
+                          {match.awayTeam}
+                        </p>
+                      </div>
+                    </div>
+                    <Link
+                      to="add-commentary"
+                      state={{ match }} 
+                      className="flex items-center gap-1.5 bg-yellow-200 hover:bg-yellow-300 text-black font-bold text-xs rounded-lg border-2 border-black p-2! transition-colors duration-200"
+                    >
                       <MessageSquare size={14} />
                       Add Commentary
-                    </button>
+                    </Link>
                   </div>
                 ))}
               </div>

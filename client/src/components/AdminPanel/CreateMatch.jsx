@@ -3,7 +3,8 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useCreateMatchMutation } from "../../store/matchesApi.js";
-export default function CreateMatch({ onBack }) {
+
+export default function CreateMatch() {
   const navigate = useNavigate();
   const { handleSubmit, register } = useForm();
   const [isCricket, setisCricket] = useState(false);
@@ -44,8 +45,9 @@ export default function CreateMatch({ onBack }) {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={onBack}
+            onClick={()=>navigate("/admin")}
             className="text-black hover:opacity-70"
+          
           >
             <ArrowLeft size={20} />
           </button>

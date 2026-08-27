@@ -11,6 +11,8 @@ export default function Match({
   startTime,
   endTime,
   viewing = false,
+  onViewCommentary,
+  onCloseCommentary
 }) {
   return (
     <div className="w-full max-w-sm border-2 rounded-2xl p-3! shadow-sm ">
@@ -57,11 +59,12 @@ export default function Match({
         <div className="flex items-center gap-2">
           <button
             className={`${viewing ? " bg-sky-200 hover:bg-sky-300" : " bg-amber-200 hover:bg-amber-300"} btn btn-sm text-black border-2 border-black rounded-full font-bold p-2!`}
+          onClick={onViewCommentary}
           >
             {viewing ? "Viewing Recape" : "View Recape"}
           </button>
           {viewing && (
-            <button className="btn btn-sm bg-red-100 hover:bg-red-200 text-black border-2 border-black rounded-full font-bold p-2!">
+            <button className="btn btn-sm bg-red-100 hover:bg-red-200 text-black border-2 border-black rounded-full font-bold p-2!" onClick={onCloseCommentary}>
               Close
             </button>
           )}
