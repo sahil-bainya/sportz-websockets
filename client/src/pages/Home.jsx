@@ -1,18 +1,27 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Header, Match, Commentary } from "../components";
-import { useGetMatchesQuery } from "../store/matchesApi";
+import { useGetMatchesQuery } from "../store/matchesApi.js";
+import { useDispatch,useSelector } from "react-redux";
+import { setInitialMatches } from "../store/liveMatchesSlice.js";
 
 const SPORTS = ["all", "cricket", "football", "basketball"];
 
 export default function Home() {
+  const dispatch = useDispatch();
   const { data, isLoading, error } = useGetMatchesQuery();
+  const matches = useSelector((state) => state.liveMatches.matches);
+
   const [filter, setFilter] = useState("all");
   const [selectedMatchId,setSelectedMatchId] = useState(null)
 
+   useEffect(() => {
+    if (data) {
+      dispatch(setInitialMatches(data));
+    }
+  }, [data, dispatch]);
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Something went wrong</p>;
-
-  const matches = data || [];
 
   const sportCounts = SPORTS.reduce((acc, sport) => {
     acc[sport] =

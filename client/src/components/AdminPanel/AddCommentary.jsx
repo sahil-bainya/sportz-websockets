@@ -84,6 +84,7 @@ export default function AddCommentary() {
     eventTypes: [],
     tags: [],
   };
+
   const message = watch("message") || "";
 
   const onSubmitHandler = async (formData) => {
@@ -95,10 +96,11 @@ export default function AddCommentary() {
         team: formData.team || undefined,
         actor: formData.actor || undefined,
         tags: formData.tags?.length ? formData.tags : undefined,
-        matchId:Number(match.id)
+        matchId: Number(match.id),
       };
       await addCommentary(payload).unwrap();
       navigate("/admin");
+      alert(`New Commentary Added`);
     } catch (err) {
       console.error("Failed to create match:", err);
     }

@@ -141,48 +141,45 @@ export default function Dashboard() {
                 {data.data.liveMatches.map((match) => (
                   <div
                     key={match.id}
-                    className="flex items-center justify-between border border-gray-200 rounded-xl p-2! w-full"
+                    className="flex flex-col  gap-2 border border-gray-200 rounded-xl p-2! w-full"
                   >
-                    <div>
-                      <p className="font-semibold text-black text-sm">
-                        {match.homeTeam} vs {match.awayTeam}
-                      </p>
-                      <p className="text-xs text-gray-400">{match.sport}</p>
-                    </div>
+                    <p className="text-xs text-gray-400">{match.sport}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="text-center">
+                          <p className="font-extrabold text-black text-lg leading-none">
+                            {match.homeScore}
+                            {match.sport === "cricket" &&
+                              `-${match.homeTeamWickets}`}
+                          </p>
+                          <p className="text-s text-gray-800 mt-1!">
+                            {match.homeTeam}
+                          </p>
+                        </div>
 
-                    <div className="flex items-center gap-3">
-                      <div className="text-center">
-                        <p className="font-extrabold text-black text-lg leading-none">
-                          {match.homeScore}
-                          {match.sport === "cricket" &&
-                            `-${match.homeTeamWickets}`}
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1!">
-                          {match.homeTeam}
-                        </p>
+                        <span className="font-bold text-gray-300">-</span>
+
+                        <div className="text-center">
+                          <p className="font-extrabold text-black text-lg leading-none">
+                            {match.awayScore}
+                            {match.sport === "cricket" &&
+                              `-${match.awayTeamWickets}`}
+                          </p>
+                          <p className="text-s text-gray-700 mt-1!">
+                            {match.awayTeam}
+                          </p>
+                        </div>
                       </div>
-
-                      <span className="font-bold text-gray-300">-</span>
-
-                      <div className="text-center">
-                        <p className="font-extrabold text-black text-lg leading-none">
-                          {match.awayScore}
-                          {match.sport === "cricket" &&
-                            `-${match.awayTeamWickets}`}
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1!">
-                          {match.awayTeam}
-                        </p>
-                      </div>
+                      <div>
+                      <Link
+                        to="add-commentary"
+                        state={{ match }}
+                        className="flex items-center gap-1.5 bg-yellow-200 hover:bg-yellow-300 text-black font-bold text-xs rounded-lg border-2 border-black p-2! transition-colors duration-200"
+                      >
+                        <MessageSquare size={14} />
+                        Add Commentary
+                      </Link></div>
                     </div>
-                    <Link
-                      to="add-commentary"
-                      state={{ match }} 
-                      className="flex items-center gap-1.5 bg-yellow-200 hover:bg-yellow-300 text-black font-bold text-xs rounded-lg border-2 border-black p-2! transition-colors duration-200"
-                    >
-                      <MessageSquare size={14} />
-                      Add Commentary
-                    </Link>
                   </div>
                 ))}
               </div>

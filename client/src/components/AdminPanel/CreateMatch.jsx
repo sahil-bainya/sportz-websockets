@@ -34,6 +34,7 @@ export default function CreateMatch() {
       }
       await createMatch(payload).unwrap();
       navigate("/admin");
+      alert(`New Match Created`);
     } catch (err) {
       console.error("Failed to create match:", err);
     }

@@ -43,5 +43,5 @@ export const {
   useLogoutMutation,
   useGetDashboardQuery,
   useRefreshTokenMutation,
-  useGetMeQuery 
+  useGetMeQuery,
 } = adminApi;

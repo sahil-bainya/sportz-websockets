@@ -26,6 +26,8 @@ export const createMatchSchema = z
     endTime: isoDateString,
     homeScore: z.coerce.number().int().nonnegative().optional(),
     awayScore: z.coerce.number().int().nonnegative().optional(),
+    homeTeamWickets: z.number().optional(),
+    awayTeamWickets: z.number().optional(),
   })
   .superRefine((data, ctx) => {
     const start = new Date(data.startTime);

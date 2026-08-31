@@ -3,10 +3,14 @@ import authReducer from "./authSlice.js";
 import { adminApi } from "./adminApi.js";
 import { matchesApi } from "./matchesApi.js";
 import { commentaryApi } from "./commentaryApi.js";
+import commentaryReducer from "./commentarySlice.js";
+import liveMatchesReducer from "./liveMatchesSlice.js"
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    liveCommentary: commentaryReducer,
+    liveMatches:liveMatchesReducer,
     [adminApi.reducerPath]: adminApi.reducer,
     [matchesApi.reducerPath]: matchesApi.reducer,
     [commentaryApi.reducerPath]: commentaryApi.reducer,
@@ -17,5 +21,3 @@ export const store = configureStore({
       .concat(matchesApi.middleware)
       .concat(commentaryApi.middleware),
 });
-
-    
