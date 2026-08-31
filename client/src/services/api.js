@@ -1,8 +1,8 @@
 import axios from "axios";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-  withCredentials: true, // yeh line — cookies automatically attach hongi
+  baseURL: `${API_URL}/api`,
+  withCredentials: true, 
 });
 
 export default api;
