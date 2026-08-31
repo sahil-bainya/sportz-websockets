@@ -14,6 +14,17 @@ export default function Match({
   onViewCommentary,
   onCloseCommentary
 }) {
+
+  let result;
+  if(status==="finished"){
+    if(homeScore===awayScore){
+      result ="Match drawn" 
+    }else if(homeScore>awayScore){
+      result = homeTeam + " won"
+    }else{
+        result = awayTeam + " won"
+    }
+  }
   return (
     <div className="w-full max-w-sm border-2 rounded-2xl p-3! shadow-sm ">
       <div className="flex items-center justify-between mb-4!">
@@ -46,6 +57,15 @@ export default function Match({
           {awayScore}{sportName==="cricket" && "/"+awayTeamWickets}
         </div>
       </div>
+     <p
+  className={`text-sm font-medium ${
+    result === "Match drawn"
+      ? "text-gray-500"
+      : "text-green-600"
+  }`}
+>
+  {status === "finished" && result}
+</p>
       <hr className="text-gray-200 mb-3!" />
       <div className="flex items-center justify-between">
         <span className="text-xs text-gray-500 font-bold">
