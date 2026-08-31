@@ -9,13 +9,18 @@
 
 **Sportz** is a full-stack web application that delivers live match updates and real-time commentary for sports like cricket, football, and basketball. Built as a learning project to understand WebSockets in production-like conditions, it features a secure admin panel, real-time data synchronization, and a modern React frontend.
 
-### What It Does
+### Key Features
 
-- **Live Match Tracking** — View all matches with real-time scores
-- **Instant Commentary** — Receive live commentary updates via WebSockets
-- **Admin Dashboard** — Create matches, add commentary, manage data
-- **Secure Access** — Rate limiting, bot detection, and protected admin routes
-- **Performance Monitoring** — Site24x7 APM Insight integration
+| Feature | Description |
+|---|---|
+| **Real-Time WebSockets** | Enables bidirectional communication with match-specific subscriptions, targeted commentary broadcasting, and ping/pong connection health checks. |
+| **Production Security** | Integrated Arcjet for bot detection, request protection, and configurable DRY_RUN/LIVE security modes. |
+| **Rate Limiting** | Protects the application with IP-based limits of 50 HTTP requests per 10 seconds and 5 WebSocket connections per 2 seconds. |
+| **Live State Synchronization** | Uses Redux and RTK Query for centralized state management, API caching, cache invalidation, and seamless real-time UI updates. |
+| **Database Layer** | Uses Drizzle ORM for structured PostgreSQL queries, schema management, and database migrations. |
+| **Production Monitoring** | Integrated Site24x7 APM for application performance monitoring, error tracking, and production health insights. |
+| **Responsive UI** | Built with reusable, responsive components and a consistent design system for match cards, live commentary, and admin interfaces. |
+| **Modern Frontend** | Built with React 19 and Vite for a fast development workflow and optimized production builds. |
 
 ---
 
