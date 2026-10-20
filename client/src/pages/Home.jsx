@@ -1,8 +1,9 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Header, Match, Commentary } from "../components";
 import { useGetMatchesQuery } from "../store/matchesApi.js";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setInitialMatches } from "../store/liveMatchesSlice.js";
+import { SpotrzSkeleton } from "../components";
 
 const SPORTS = ["all", "cricket", "football", "basketball"];
 
@@ -12,15 +13,16 @@ export default function Home() {
   const matches = useSelector((state) => state.liveMatches.matches);
 
   const [filter, setFilter] = useState("all");
-  const [selectedMatchId,setSelectedMatchId] = useState(null)
+  const [selectedMatchId, setSelectedMatchId] = useState(null);
 
-   useEffect(() => {
+  useEffect(() => {
     if (data) {
       dispatch(setInitialMatches(data));
     }
   }, [data, dispatch]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <SpotrzSkeleton />;
+
   if (error) return <p>Something went wrong</p>;
 
   const sportCounts = SPORTS.reduce((acc, sport) => {
@@ -37,7 +39,7 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <div className="px-6! pb-0!">
-        <Header status={!isLoading && !error && data?.length>0}/>
+        <Header status={!isLoading && !error && data?.length > 0} />
       </div>
 
       <div className="flex-1 min-h-0 flex gap-6 p-6!">
@@ -79,16 +81,16 @@ export default function Home() {
                 endTime={match.endTime}
                 homeTeamWickets={match.homeTeamWickets}
                 awayTeamWickets={match.awayTeamWickets}
-                onViewCommentary={()=>setSelectedMatchId(match.id)}
-                viewing={selectedMatchId===match.id}
-                onCloseCommentary={()=>setSelectedMatchId(null)}
+                onViewCommentary={() => setSelectedMatchId(match.id)}
+                viewing={selectedMatchId === match.id}
+                onCloseCommentary={() => setSelectedMatchId(null)}
               />
             ))}
           </div>
         </div>
 
         <div className="w-full max-w-md min-h-0">
-          <Commentary matchId={selectedMatchId}/>
+          <Commentary matchId={selectedMatchId} />
         </div>
       </div>
     </div>

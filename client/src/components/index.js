@@ -8,9 +8,10 @@ import Dashboard from "./AdminPanel/Dashboard.jsx";
 import Sidebar from "./AdminPanel/SideBar.jsx";
 import Layout from "./AdminPanel/Layout.jsx";
 import ProtectedRoute from "./ProtectedRouter.jsx";
-
+import SpotrzSkeleton from "./SpotrzSkeleton.jsx";
 export {
   Layout,
+  SpotrzSkeleton,
   Sidebar,
   Header,
   Match,
@@ -19,5 +20,5 @@ export {
   CreateMatch,
   AddCommentary,
   Dashboard,
-  ProtectedRoute
+  ProtectedRoute,
 };
