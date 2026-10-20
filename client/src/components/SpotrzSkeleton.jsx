@@ -1,5 +1,5 @@
 const MatchCardSkeleton = () => (
-  <div className="flex flex-col gap-4 rounded-2xl border-2 border-base-300 bg-base-100 p-4">
+  <div className="flex flex-col gap-3 rounded-2xl border-2 border-base-300 bg-base-100 p-3">
     {/* sport tag + status */}
     <div className="flex items-center justify-between">
       <div className="skeleton h-6 w-20 rounded-full"></div>
@@ -45,8 +45,8 @@ const CommentarySkeleton = () => (
 
 const SpotrzSkeleton = () => {
   return (
-    <div className="min-h-screen bg-base-100 p-3 sm:p-5">
-      <div className="mx-auto flex max-w-7xl flex-col gap-5">
+    <div className="h-screen overflow-hidden bg-base-100 p-3 sm:p-4 ">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4">
         {/* Header */}
         <div className="flex flex-col gap-3 rounded-2xl border-2 border-base-300 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
           <div className="flex flex-col gap-2">
@@ -72,7 +72,7 @@ const SpotrzSkeleton = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {Array.from({ length: 6 }).map((_, i) => (
+              {Array.from({ length: 4 }).map((_, i) => (
                 <MatchCardSkeleton key={i} />
               ))}
             </div>
@@ -86,7 +86,7 @@ const SpotrzSkeleton = () => {
             </div>
 
             <div className="flex flex-col gap-6 p-4">
-              {Array.from({ length: 3 }).map((_, i) => (
+              {Array.from({ length: 2 }).map((_, i) => (
                 <CommentarySkeleton key={i} />
               ))}
             </div>
